@@ -19,11 +19,12 @@ class Sender:
     def restore_presets(self, presets: dict):
         for preset_name, preset_params in presets.items():
             cmd.print_confirm(f'Setting values for preset: {preset_name}...')
-            for param_name, param_value in preset_params.items():
-                if param_name.startswith('__'):
-                    continue
+            for param_setting in preset_params:
+                if 'path' in param_setting.keys() and 'value' in param_setting.keys():
+                    self.osc_client.send_message(f'{self.path_osc_set_param}{param_setting["path"]}', param_setting["value"])
+                else:
+                    print('Skipping incorrectly formatted entry:\n', param_setting)
                 sleep(0.01)
-                self.osc_client.send_message(f'{self.path_osc_set_param}/{param_name}', param_value['value'])
             cmd.print_confirm(f'Saving preset as: {preset_name}\n')
             self.osc_client.send_message(f'{self.path_osc_save_preset}', preset_name)
             sleep(.3)

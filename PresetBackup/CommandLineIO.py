@@ -15,9 +15,12 @@ class CommandLineIO:
         pass
 
     @staticmethod
-    def get_rnbo_ids() -> tuple | None:
+    def get_rnbo_ids(is_test: bool = False) -> tuple | None:
         rnbo_ids = None
-        last_path = '/home/pi/Documents/rnbo/saves'
+        if is_test:
+            last_path = './TestData'
+        else:
+            last_path = '/home/pi/Documents/rnbo/saves'
         file_candidates = []
         files = os.listdir(last_path)
         for file in files:
@@ -61,9 +64,12 @@ class CommandLineIO:
         return file_candidate[answer]
 
     @staticmethod
-    def choose_input_preset_file() -> str | None:
+    def choose_input_preset_file(is_test: bool = False) -> str | None:
         chosen_file = None
-        path = "/home/pi/Documents/rnbo-presets"
+        if is_test:
+            path = './rnbo-presets'
+        else:
+            path = "/home/pi/Documents/rnbo-presets"
 
         file_candidates = []
         files = os.listdir(path)
@@ -144,11 +150,11 @@ class CommandLineIO:
 
             if 'instances' in last_config_dict and 'config_path' in last_config_dict['instances'][0]:
                 config_id = last_config_dict['instances'][0]['config_path']
-                config_id = config_id[config_id.rindex('rnbogen.') + 8:config_id.rindex('-config.json')]
+                config_id = config_id[config_id.rindex('/') + 1::]
 
             if 'instances' in last_config_dict and 'so_path' in last_config_dict['instances'][0]:
                 runner_id = last_config_dict['instances'][0]['so_path']
-                runner_id = runner_id[runner_id.rindex('libRNBORunnerSO') + 8:runner_id.rindex('.so')]
+                runner_id = runner_id[runner_id.rindex('/') + 1::]
             if config_id is not None and runner_id is not None:
                 return config_id, runner_id
             else:
@@ -170,7 +176,7 @@ class CommandLineIO:
         return presets
 
     @staticmethod
-    def print_db_presets_result(presets: list) -> dict:
+    def print_db_presets_result(presets: list) -> dict | None:
         if len(presets) == 0:
             CommandLineIO.print_notice(f'No presets found for patcher')
         else:
@@ -192,6 +198,8 @@ class CommandLineIO:
                     f'{Color.OKCYAN}Please confirm: Back up ALL presets?{Color.ENDC} [y/n]: ').lower() == 'y'
                 if confirmation:
                     backup_presets = preset_data
+                else:
+                    return None
             else:
                 valid_choices = []
                 chosen_presets = chosen_presets.split(',')
@@ -219,6 +227,8 @@ class CommandLineIO:
                         preset_data_list = list(preset_data.items())
                         for i in valid_choices:
                             backup_presets[preset_data_list[i][0]] = preset_data_list[i][1]
+                    else:
+                        return None
             for preset_name in backup_presets.keys():
                 backup_presets[preset_name] = json.loads(backup_presets[preset_name])
             return backup_presets
@@ -236,5 +246,5 @@ class CommandLineIO:
         print(f'{Color.WARNING}{message}{Color.ENDC}')
 
     @staticmethod
-    def print_confirm(message: str)->None:
+    def print_confirm(message: str) -> None:
         print(f'{Color.OKGREEN}{message}{Color.ENDC}')

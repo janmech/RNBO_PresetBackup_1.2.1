@@ -9,8 +9,11 @@ class Connector:
         pass
 
     @staticmethod
-    def get_patcher_id(rnbo_ids: tuple) -> int | None:
-        db_path = '/home/pi/Documents/rnbo'
+    def get_patcher_id(rnbo_ids: tuple, is_test: bool= False) -> int | None:
+        if is_test:
+            db_path = './TestData'
+        else:
+            db_path = '/home/pi/Documents/rnbo'
         connection = sqlite3.connect(f'{db_path}/oscqueryrunner.sqlite')
         cursor = connection.cursor()
         (config_id, runner_id) = rnbo_ids
@@ -36,7 +39,7 @@ class Connector:
         return None
 
     @staticmethod
-    def get_backup_presets(patcher_id: int, is_test: bool = False) -> dict:
+    def get_backup_presets(patcher_id: int, is_test: bool = False) -> dict|None:
         if is_test:
             db_path = './TestData'
         else:

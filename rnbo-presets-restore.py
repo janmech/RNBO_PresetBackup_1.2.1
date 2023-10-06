@@ -13,6 +13,7 @@ def init_argparse() -> ArgumentParser:
         usage="%(prog)s [OPTION] ",
         description="Restore RNBO Presets from backup file"
     )
+    arg_parser.add_argument("-t", "--test", help="Use Test File Path", required=False, default=False, action='store_true', )
     return arg_parser
 
 
@@ -21,7 +22,7 @@ if __name__ == '__main__':
         parser = init_argparse()
         args = parser.parse_args()
         osc_sender = OscSender.Sender(1234, '127.0.0.1')
-        preset_file: str | None = cmd_io.choose_input_preset_file()
+        preset_file: str | None = cmd_io.choose_input_preset_file(args.test)
         if preset_file is None:
             exit(0)
         presets: dict | None = cmd_io.parse_preset_file(preset_file)
