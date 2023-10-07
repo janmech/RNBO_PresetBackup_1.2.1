@@ -21,7 +21,8 @@ It allows to backup prestes from the loaded patcher to a JSON file and restore t
 - change to your *Documents* folder with the command:  
 `cd ~/Documents`
 - clone this repository using https:  
-  `git clone https://github.com/janmech/RNBO_PresetBackup_1.2.1.git`
+  `git clone https://github.com/janmech/RNBO_PresetBackup_1.2.1.git`  
+or **download the latest release** and unpack the archive in /home/pi/Documents,
 - cd into the newly created folder *RNBO_PresetBackup_1.2.1*:
   `cd RNBO_PresetBackup_1.2.1`
 - run the setup script:  
@@ -33,8 +34,8 @@ This script will install the dependencies. (the python package [python-osc](http
 
 - remove the folder RNBO_PresetBackup_1.2.1: `rm -r path/to/RNBO_PresetBackup_1.2.1`
 - delete the links in */usr/local/bin*:  
-`sudo unlink /usr/local/bin/rnbo-presets-backup.py` and  
-`sudo unlink /usr/local/bin/rnbo-presets-restore.py`
+`sudo unlink /usr/local/bin/rnbo-presets-backup` and  
+`sudo unlink /usr/local/bin/rnbo-presets-restore`
 
 ## Usage
 
